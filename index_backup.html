@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Character Counter</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#6a11cb,#2575fc);
+    overflow:hidden;
+    padding:20px;
+    position:relative;
+}
+
+/* Floating Background */
+body::before{
+    content:"";
+    position:absolute;
+    width:350px;
+    height:350px;
+    background:rgba(255,255,255,.15);
+    border-radius:50%;
+    top:-80px;
+    left:-80px;
+}
+
+body::after{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:300px;
+    background:rgba(255,255,255,.1);
+    border-radius:50%;
+    bottom:-80px;
+    right:-80px;
+}
+
+.container{
+    width:100%;
+    max-width:500px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.3);
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+    color:white;
+    position:relative;
+    z-index:2;
+    animation:fadeIn .8s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        transform:translateY(30px);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+h2{
+    text-align:center;
+    margin-bottom:10px;
+    font-size:30px;
+}
+
+.subtitle{
+    text-align:center;
+    margin-bottom:20px;
+    opacity:.9;
+    font-size:15px;
+}
+
+textarea{
+    width:100%;
+    height:180px;
+    padding:15px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    resize:none;
+    font-size:16px;
+    transition:.3s;
+}
+
+textarea:focus{
+    transform:scale(1.02);
+    box-shadow:0 0 20px rgba(255,255,255,.35);
+}
+
+.progress-container{
+    width:100%;
+    height:10px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:#00ff9d;
+    transition:.3s;
+}
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+    font-weight:500;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+#warning{
+    margin-top:18px;
+    text-align:center;
+    font-size:15px;
+    font-weight:600;
+    min-height:25px;
+}
+
+button{
+    width:100%;
+    margin-top:20px;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    background:#fff;
+    color:#2575fc;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#2575fc;
+    color:#fff;
+    transform:translateY(-3px);
+}
+
+/* Responsive */
+
+@media (max-width:768px){
+
+.container{
+    max-width:90%;
+    padding:25px;
+}
+
+h2{
+    font-size:26px;
+}
+
+textarea{
+    height:160px;
+}
+
+}
+
+@media (max-width:480px){
+
+body{
+    padding:15px;
+}
+
+.container{
+    padding:20px;
+}
+
+h2{
+    font-size:22px;
+}
+
+.subtitle{
+    font-size:14px;
+}
+
+textarea{
+    height:140px;
+    font-size:15px;
+}
+
+.info{
+    flex-direction:column;
+    align-items:flex-start;
+    font-size:14px;
+}
+
+button{
+    font-size:15px;
+}
+
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>📝 Character Counter</h2>
+
+<p class="subtitle">
+Write your thoughts below. Maximum 200 characters.
+</p>
+
+<textarea id="message" maxlength="200"
+placeholder="Start typing something amazing..."></textarea>
+
+<div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="info">
+    <span id="typed">Typed: <b>0</b></span>
+    <span id="remaining">Remaining: <b>200</b></span>
+</div>
+
+<p id="warning"></p>
+
+<button onclick="clearText()">🗑 Clear Text</button>
+
+</div>
+
+<script>
+
+const textarea = document.getElementById("message");
+const typed = document.getElementById("typed");
+const remaining = document.getElementById("remaining");
+const warning = document.getElementById("warning");
+const progress = document.getElementById("progressBar");
+
+const maxLength = 200;
+
+textarea.addEventListener("input", () => {
+
+    let length = textarea.value.length;
+    let remain = maxLength - length;
+
+    typed.innerHTML = "Typed: <b>" + length + "</b>";
+    remaining.innerHTML = "Remaining: <b>" + remain + "</b>";
+
+    let percent = (length / maxLength) * 100;
+    progress.style.width = percent + "%";
+
+    // Progress bar colors
+    if(percent < 50){
+        progress.style.background = "#00ff9d";
+    }
+    else if(percent < 80){
+        progress.style.background = "#ffd43b";
+    }
+    else{
+        progress.style.background = "#ff4d4d";
+    }
+
+    // Messages
+    if(length === 0){
+        warning.innerHTML = "";
+    }
+    else if(remain === 0){
+        warning.style.color = "#ff4d4d";
+        warning.innerHTML = "🚫 Character limit reached!";
+    }
+    else if(remain <= 20){
+        warning.style.color = "#ffe066";
+        warning.innerHTML = "⚠ Hurry! Only <b>" + remain + "</b> characters left.<br><span style='color:#00ff9d'>✅ Successfully Saved!</span>";
+    }
+    else{
+        warning.style.color = "#00ff9d";
+        warning.innerHTML = "✅ Successfully Saved! Your message is within the character limit.";
+    }
+
+});
+
+function clearText(){
+
+    textarea.value = "";
+    typed.innerHTML = "Typed: <b>0</b>";
+    remaining.innerHTML = "Remaining: <b>200</b>";
+    warning.innerHTML = "";
+    progress.style.width = "0%";
+    progress.style.background = "#00ff9d";
+
+}
+
+</script>
+
+</body>
+</html>
