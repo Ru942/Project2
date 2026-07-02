@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -22,8 +23,8 @@ body{
     justify-content:center;
     align-items:center;
     background:linear-gradient(135deg,#6a11cb,#2575fc);
-    overflow:hidden;
     padding:20px;
+    overflow:hidden;
     position:relative;
 }
 
@@ -44,7 +45,7 @@ body::after{
     position:absolute;
     width:300px;
     height:300px;
-    background:rgba(255,255,255,.1);
+    background:rgba(255,255,255,.10);
     border-radius:50%;
     bottom:-80px;
     right:-80px;
@@ -56,23 +57,23 @@ body::after{
     background:rgba(255,255,255,.15);
     backdrop-filter:blur(20px);
     border:1px solid rgba(255,255,255,.3);
-    padding:30px;
     border-radius:20px;
+    padding:30px;
     box-shadow:0 15px 40px rgba(0,0,0,.25);
-    color:white;
+    color:#fff;
     position:relative;
-    z-index:2;
+    z-index:1;
     animation:fadeIn .8s ease;
 }
 
 @keyframes fadeIn{
     from{
-        transform:translateY(30px);
         opacity:0;
+        transform:translateY(30px);
     }
     to{
-        transform:translateY(0);
         opacity:1;
+        transform:translateY(0);
     }
 }
 
@@ -86,7 +87,6 @@ h2{
     text-align:center;
     margin-bottom:20px;
     opacity:.9;
-    font-size:15px;
 }
 
 textarea{
@@ -126,17 +126,17 @@ textarea:focus{
     display:flex;
     justify-content:space-between;
     margin-top:15px;
-    font-weight:500;
     flex-wrap:wrap;
     gap:10px;
+    font-weight:500;
 }
 
 #warning{
-    margin-top:18px;
     text-align:center;
+    margin-top:18px;
     font-size:15px;
     font-weight:600;
-    min-height:25px;
+    min-height:45px;
 }
 
 button{
@@ -159,9 +159,22 @@ button:hover{
     transform:translateY(-3px);
 }
 
+.footer{
+    margin-top:25px;
+    padding-top:15px;
+    border-top:1px solid rgba(255,255,255,.3);
+    text-align:center;
+    font-size:14px;
+    color:rgba(255,255,255,.9);
+}
+
+.footer strong{
+    color:#00ff9d;
+}
+
 /* Responsive */
 
-@media (max-width:768px){
+@media(max-width:768px){
 
 .container{
     max-width:90%;
@@ -178,7 +191,7 @@ textarea{
 
 }
 
-@media (max-width:480px){
+@media(max-width:480px){
 
 body{
     padding:15px;
@@ -211,10 +224,16 @@ button{
     font-size:15px;
 }
 
+.footer{
+    font-size:12px;
 }
+
+}
+
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
@@ -222,10 +241,12 @@ button{
 <h2>📝 Character Counter</h2>
 
 <p class="subtitle">
-Write your thoughts below. Maximum 200 characters.
+Write your thoughts below. Maximum <strong>200 characters</strong>.
 </p>
 
-<textarea id="message" maxlength="200"
+<textarea
+id="message"
+maxlength="200"
 placeholder="Start typing something amazing..."></textarea>
 
 <div class="progress-container">
@@ -241,67 +262,74 @@ placeholder="Start typing something amazing..."></textarea>
 
 <button onclick="clearText()">🗑 Clear Text</button>
 
+<div class="footer">
+    © 2026 All Rights Reserved | <strong>Rupesh K R</strong>
+</div>
+
 </div>
 
 <script>
 
-const textarea = document.getElementById("message");
-const typed = document.getElementById("typed");
-const remaining = document.getElementById("remaining");
-const warning = document.getElementById("warning");
-const progress = document.getElementById("progressBar");
+const textarea=document.getElementById("message");
+const typed=document.getElementById("typed");
+const remaining=document.getElementById("remaining");
+const warning=document.getElementById("warning");
+const progress=document.getElementById("progressBar");
 
-const maxLength = 200;
+const maxLength=200;
 
-textarea.addEventListener("input", () => {
+textarea.addEventListener("input",()=>{
 
-    let length = textarea.value.length;
-    let remain = maxLength - length;
+let length=textarea.value.length;
+let remain=maxLength-length;
 
-    typed.innerHTML = "Typed: <b>" + length + "</b>";
-    remaining.innerHTML = "Remaining: <b>" + remain + "</b>";
+typed.innerHTML="Typed: <b>"+length+"</b>";
+remaining.innerHTML="Remaining: <b>"+remain+"</b>";
 
-    let percent = (length / maxLength) * 100;
-    progress.style.width = percent + "%";
+let percent=(length/maxLength)*100;
+progress.style.width=percent+"%";
 
-    // Progress bar colors
-    if(percent < 50){
-        progress.style.background = "#00ff9d";
-    }
-    else if(percent < 80){
-        progress.style.background = "#ffd43b";
-    }
-    else{
-        progress.style.background = "#ff4d4d";
-    }
+// Progress bar color
+if(percent<50){
+    progress.style.background="#00ff9d";
+}
+else if(percent<80){
+    progress.style.background="#ffd43b";
+}
+else{
+    progress.style.background="#ff4d4d";
+}
 
-    // Messages
-    if(length === 0){
-        warning.innerHTML = "";
-    }
-    else if(remain === 0){
-        warning.style.color = "#ff4d4d";
-        warning.innerHTML = "🚫 Character limit reached!";
-    }
-    else if(remain <= 20){
-        warning.style.color = "#ffe066";
-        warning.innerHTML = "⚠ Hurry! Only <b>" + remain + "</b> characters left.<br><span style='color:#00ff9d'>✅ Successfully Saved!</span>";
-    }
-    else{
-        warning.style.color = "#00ff9d";
-        warning.innerHTML = "✅ Successfully Saved! Your message is within the character limit.";
-    }
+// Messages
+if(length===0){
+    warning.innerHTML="";
+}
+else if(remain===0){
+    warning.style.color="#ff4d4d";
+    warning.innerHTML="🚫 Character limit reached!";
+}
+else if(remain<=20){
+    warning.style.color="#ffe066";
+    warning.innerHTML="⚠ Hurry! Only <b>"+remain+"</b> characters left.<br><span style='color:#00ff9d;'>✅ Successfully Saved!</span>";
+}
+else{
+    warning.style.color="#00ff9d";
+    warning.innerHTML="✅ Successfully Saved! Your message is within the character limit.";
+}
 
 });
 
 function clearText(){
 
-    textarea.value = "";
-    typed.innerHTML = "Typed: <b>0</b>";
-    remaining.innerHTML = "Remaining: <b>200</b>";
-    warning.innerHTML = "";
-    progress.style.width = "0%";
-    progress.style.background = "#00ff9d";
+textarea.value="";
+
+typed.innerHTML="Typed: <b>0</b>";
+remaining.innerHTML="Remaining: <b>200</b>";
+
+warning.innerHTML="";
+
+progress.style.width="0%";
+progress.style.background="#00ff9d";
 
 }
 
