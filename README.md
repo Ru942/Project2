@@ -2,6 +2,8 @@
 
 An elegant and responsive **Character Counter** web application built using **HTML, CSS, and JavaScript**. The project provides real-time character counting with a modern glassmorphism interface, making it both functional and visually appealing.
 
+Live Demo - https://ru942.github.io/Project2/
+
 ## 🚀 Live Features
 
 * ✨ Modern glassmorphism UI design
